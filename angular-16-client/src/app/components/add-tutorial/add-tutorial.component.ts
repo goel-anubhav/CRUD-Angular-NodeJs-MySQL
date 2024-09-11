@@ -14,49 +14,72 @@ export class AddTutorialComponent {
     published: false,
   };
   submitted = false;
+  errorMessage = '';
 
   constructor(private tutorialService: TutorialService) {}
 
   // Save as Draft method
   saveAsDraft(): void {
-    const data = {
-      title: this.tutorial.title,
-      description: this.tutorial.description,
-      published: false, // Not published, just saved as draft
-    };
+    if (this.validateForm()) {
+      const data = {
+        title: this.tutorial.title,
+        description: this.tutorial.description,
+        published: false, // Not published, just saved as draft
+      };
 
-    this.tutorialService.create(data).subscribe({
-      next: (res) => {
-        console.log('Saved as draft:', res);
-        this.submitted = true;
-        alert('Tutorial saved as draft successfully!');
-      },
-      error: (e) => console.error(e),
-    });
+      this.tutorialService.create(data).subscribe({
+        next: (res) => {
+          console.log('Saved as draft:', res);
+          this.submitted = true;
+          alert('Tutorial saved as draft successfully!');
+        },
+        error: (e) => {
+          console.error(e);
+          this.errorMessage = 'An error occurred while saving as draft.';
+        },
+      });
+    }
   }
 
   // Save and Publish method
   saveTutorial(): void {
-    const data = {
-      title: this.tutorial.title,
-      description: this.tutorial.description,
-      published: true, // Set to published true
-    };
+    if (this.validateForm()) {
+      const data = {
+        title: this.tutorial.title,
+        description: this.tutorial.description,
+        published: true, // Set to published true
+      };
 
-    this.tutorialService.create(data).subscribe({
-      next: (res) => {
-        console.log('Published:', res);
-        this.submitted = true;
-        alert('Tutorial published successfully!');
-      },
-      error: (e) => console.error(e),
-    });
+      this.tutorialService.create(data).subscribe({
+        next: (res) => {
+          console.log('Published:', res);
+          this.submitted = true;
+          alert('Tutorial published successfully!');
+        },
+        error: (e) => {
+          console.error(e);
+          this.errorMessage =
+            'An error occurred while publishing the tutorial.';
+        },
+      });
+    }
+  }
+
+  // Validate form input
+  validateForm(): boolean {
+    if (!this.tutorial.title || !this.tutorial.description) {
+      this.errorMessage = 'Both title and description are required!';
+      return false;
+    }
+    this.errorMessage = ''; // Clear any previous error messages
+    return true;
   }
 
   // Clear the form fields
   clearText(): void {
     this.tutorial.title = '';
     this.tutorial.description = '';
+    this.errorMessage = ''; // Clear error message when clearing form
   }
 
   // Create new tutorial, resetting the form
@@ -67,5 +90,6 @@ export class AddTutorialComponent {
       description: '',
       published: false,
     };
+    this.errorMessage = ''; // Reset error message on new tutorial
   }
 }
