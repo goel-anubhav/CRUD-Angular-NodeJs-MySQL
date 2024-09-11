@@ -1,44 +1,48 @@
-<div class="list row">
-  <div class="col-md-8">
-    <div class="input-group mb-3">
-      <input
-        type="text"
-        class="form-control"
-        placeholder="Search by title"
-        [(ngModel)]="title"
-      />
-      <div class="input-group-append">
-        <button
-          class="btn btn-outline-secondary"
-          type="button"
-          (click)="searchTitle()"
-        >
-          Search
+<div class="container mt-5 p-4 custom-bg shadow-lg rounded">
+  <div class="row">
+    <!-- Search Bar Section -->
+    <div class="col-md-8 mb-4">
+      <div class="input-group shadow-sm">
+        <input
+          type="text"
+          class="form-control form-control-lg input-grow"
+          placeholder="Search by title"
+          [(ngModel)]="title"
+        />
+        <button class="btn btn-primary btn-lg hover-float" type="button" (click)="searchTitle()">
+          <i class="fas fa-search"></i> Search
         </button>
       </div>
     </div>
   </div>
-  <div class="col-md-6">
-    <h4>Tutorials List</h4>
-    <ul class="list-group">
-      <li
-        class="list-group-item"
-        *ngFor="let tutorial of tutorials; let i = index"
-        [class.active]="i == currentIndex"
-        (click)="setActiveTutorial(tutorial, i)"
-      >
-        {{ tutorial.title }}
-      </li>
-    </ul>
 
-    <button class="m-3 btn btn-sm btn-danger" (click)="removeAllTutorials()">
-      Remove All
-    </button>
-  </div>
-  <div class="col-md-6">
-    <app-tutorial-details
-      [viewMode]="true"
-      [currentTutorial]="currentTutorial"
-    ></app-tutorial-details>
+  <div class="row">
+    <!-- Tutorials List Section -->
+    <div class="col-md-6 mb-5">
+      <h4 class="text-primary mb-4"><i class="fas fa-list"></i> Tutorials List</h4>
+      <ul class="list-group shadow-sm animate__animated animate__fadeInUp">
+        <li
+          class="list-group-item list-group-item-action"
+          *ngFor="let tutorial of tutorials; let i = index"
+          [class.active]="i == currentIndex"
+          (click)="setActiveTutorial(tutorial, i)"
+        >
+          <i class="fas fa-book text-success"></i> {{ tutorial.title }}
+        </li>
+      </ul>
+
+      <button class="btn btn-danger mt-4 hover-float" (click)="removeAllTutorials()">
+        <i class="fas fa-trash-alt"></i> Remove All
+      </button>
+    </div>
+
+    <!-- Tutorial Details Section -->
+    <div class="col-md-6">
+      <app-tutorial-details
+        [viewMode]="true"
+        [currentTutorial]="currentTutorial"
+        class="animate__animated animate__fadeInRight"
+      ></app-tutorial-details>
+    </div>
   </div>
 </div>

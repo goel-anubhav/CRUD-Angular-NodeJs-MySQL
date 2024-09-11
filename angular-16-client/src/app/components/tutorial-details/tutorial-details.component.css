@@ -1,4 +1,77 @@
-.edit-form {
-  max-width: 400px;
-  margin: auto;
+.container {
+  max-width: 800px;
+}
+
+.card {
+  border-radius: 15px;
+}
+
+/* Custom class to control label width */
+.label-width {
+  width: 100px; /* Adjust the width as necessary */
+}
+
+.form-control {
+  border-radius: 10px;
+  border: 1px solid #ced4da;
+  transition: all 0.3s ease;
+}
+
+.form-control:focus {
+  transform: scale(1.02);
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn {
+  border-radius: 5px;
+  transition: all 0.2s ease;
+}
+
+.btn:hover {
+  transform: scale(1.05);
+}
+
+.alert {
+  border-radius: 10px;
+}
+
+.text-success, .text-danger {
+  font-weight: bold;
+}
+
+.hover-grow {
+  transition: all 0.3s ease;
+}
+
+.hover-grow:hover {
+  transform: scale(1.1);
+}
+
+.hover-float {
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.hover-float:hover {
+  transform: translateY(-3px);
+  background-color: #333;
+  color: white !important;
+}
+
+.input-grow {
+  transition: transform 0.3s ease;
+}
+
+.input-grow:focus {
+  transform: scale(1.02);
+}
+
+@media (max-width: 768px) {
+  .card {
+    padding: 15px;
+  }
+
+  .btn {
+    width: 100%;
+    margin-bottom: 10px;
+  }
 }

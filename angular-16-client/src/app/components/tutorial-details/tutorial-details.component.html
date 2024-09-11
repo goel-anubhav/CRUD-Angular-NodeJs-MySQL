@@ -1,92 +1,107 @@
-<div *ngIf="viewMode; else editable">
-  <div *ngIf="currentTutorial.id">
-    <h4>Tutorial</h4>
-    <div>
-      <label><strong>Title:</strong></label> {{ currentTutorial.title }}
-    </div>
-    <div>
-      <label><strong>Description:</strong></label>
-      {{ currentTutorial.description }}
-    </div>
-    <div>
-      <label><strong>Status:</strong></label>
-      {{ currentTutorial.published ? "Published" : "Pending" }}
+<div class="container my-5">
+  <!-- View Mode Section with Fade Animation -->
+  <div *ngIf="viewMode; else editable" class="card shadow-sm p-4 animate__animated animate__fadeIn">
+    <div *ngIf="currentTutorial?.id">
+      <h4 class="text-primary mb-4"><i class="fas fa-book"></i> Tutorial Details</h4>
+
+      <!-- Title Section with explicit spacing using custom class -->
+      <div class="mb-3 d-flex">
+        <label class="fw-bold label-width"><strong>Title:</strong></label> 
+        <span class="text-muted animate__animated animate__fadeInRight ms-2">{{ currentTutorial.title }}</span>
+      </div>
+
+      <!-- Description Section with explicit spacing using custom class -->
+      <div class="mb-3 d-flex">
+        <label class="fw-bold label-width"><strong>Description:</strong></label>
+        <span class="text-muted animate__animated animate__fadeInRight ms-2">{{ currentTutorial.description }}</span>
+      </div>
+
+      <!-- Status Section with explicit spacing -->
+      <div class="mb-3 d-flex">
+        <label class="fw-bold label-width"><strong>Status:</strong></label>
+        <span class="ms-2" [ngClass]="currentTutorial.published ? 'text-success' : 'text-danger'">
+          {{ currentTutorial.published ? "Published" : "Pending" }}
+        </span>
+      </div>
+
+      <!-- Edit Button -->
+      <a class="badge bg-warning text-dark hover-grow" routerLink="/tutorials/{{ currentTutorial.id }}">
+        <i class="fas fa-edit"></i> Edit
+      </a>
     </div>
 
-    <a class="badge badge-warning"
-      routerLink="/tutorials/{{ currentTutorial.id }}">
-      Edit
-    </a>
+    <!-- Default message when no tutorial is selected -->
+    <div *ngIf="!currentTutorial" class="alert alert-info mt-4">
+      <i class="fas fa-info-circle"></i> Please click on a Tutorial...
+    </div>
   </div>
 
-  <div *ngIf="!currentTutorial">
-    <br />
-    <p>Please click on a Tutorial...</p>
-  </div>
+  <!-- Editable Mode Section -->
+  <ng-template #editable>
+    <div *ngIf="currentTutorial?.id" class="card shadow-lg p-4 animate__animated animate__fadeIn">
+      <h4 class="text-primary mb-4"><i class="fas fa-edit"></i> Edit Tutorial</h4>
+      <form>
+        <div class="form-group mb-3">
+          <label for="title" class="fw-bold label-width">Title</label>
+          <input
+            type="text"
+            class="form-control input-grow"
+            id="title"
+            [(ngModel)]="currentTutorial.title"
+            name="title"
+          />
+        </div>
+
+        <div class="form-group mb-3">
+          <label for="description" class="fw-bold label-width">Description</label>
+          <input
+            type="text"
+            class="form-control input-grow"
+            id="description"
+            [(ngModel)]="currentTutorial.description"
+            name="description"
+          />
+        </div>
+
+        <div class="mb-3 d-flex">
+          <label class="fw-bold label-width"><strong>Status:</strong></label>
+          <span class="ms-2" [ngClass]="currentTutorial.published ? 'text-success' : 'text-danger'">
+            {{ currentTutorial.published ? "Published" : "Pending" }}
+          </span>
+        </div>
+      </form>
+
+      <!-- Buttons for Publishing/Unpublishing -->
+      <div class="d-flex justify-content-start">
+        <button
+          class="btn btn-primary me-2 hover-float"
+          *ngIf="currentTutorial.published"
+          (click)="updatePublished(false)"
+        >
+          <i class="fas fa-eye-slash"></i> Unpublish
+        </button>
+
+        <button
+          *ngIf="!currentTutorial.published"
+          class="btn btn-success me-2 hover-float"
+          (click)="updatePublished(true)"
+        >
+          <i class="fas fa-eye"></i> Publish
+        </button>
+
+        <button class="btn btn-danger me-2 hover-float" (click)="deleteTutorial()">
+          <i class="fas fa-trash-alt"></i> Delete
+        </button>
+
+        <button class="btn btn-success hover-float" (click)="updateTutorial()">
+          <i class="fas fa-save"></i> Update
+        </button>
+      </div>
+      <p class="mt-3 text-muted">{{ message }}</p>
+    </div>
+
+    <div *ngIf="!currentTutorial?.id" class="alert alert-danger mt-4">
+      <i class="fas fa-exclamation-circle"></i> Cannot access this Tutorial...
+    </div>
+  </ng-template>
 </div>
-
-<ng-template #editable>
-  <div *ngIf="currentTutorial.id" class="edit-form">
-    <h4>Tutorial</h4>
-    <form>
-      <div class="form-group">
-        <label for="title">Title</label>
-        <input
-          type="text"
-          class="form-control"
-          id="title"
-          [(ngModel)]="currentTutorial.title"
-          name="title"
-        />
-      </div>
-      <div class="form-group">
-        <label for="description">Description</label>
-        <input
-          type="text"
-          class="form-control"
-          id="description"
-          [(ngModel)]="currentTutorial.description"
-          name="description"
-        />
-      </div>
-
-      <div class="form-group">
-        <label><strong>Status:</strong></label>
-        {{ currentTutorial.published ? "Published" : "Pending" }}
-      </div>
-    </form>
-
-    <button
-      class="badge badge-primary mr-2"
-      *ngIf="currentTutorial.published"
-      (click)="updatePublished(false)"
-    >
-      UnPublish
-    </button>
-    <button
-      *ngIf="!currentTutorial.published"
-      class="badge badge-primary mr-2"
-      (click)="updatePublished(true)"
-    >
-      Publish
-    </button>
-
-    <button class="badge badge-danger mr-2" (click)="deleteTutorial()">
-      Delete
-    </button>
-
-    <button
-      type="submit"
-      class="badge badge-success mb-2"
-      (click)="updateTutorial()"
-    >
-      Update
-    </button>
-    <p>{{ message }}</p>
-  </div>
-
-  <div *ngIf="!currentTutorial.id">
-    <br />
-    <p>Cannot access this Tutorial...</p>
-  </div>
-</ng-template>
